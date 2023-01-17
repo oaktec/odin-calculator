@@ -1,6 +1,6 @@
 const KEYPAD_NUMBER_OF_COLS = 4; 
 const KEYPAD_NUMBER_OF_ROWS = 5;
-const KEYPAD_MAP = [[" ", " ", " ", "C"],
+const KEYPAD_MAP = [[" ", " ", "C", "⌫"],
                     ["7", "8", "9", "÷"], 
                     ["4", "5", "6", "×"], 
                     ["1", "2", "3", "−"], 
@@ -17,6 +17,7 @@ let overwriteNumber = true;
 let termOne;
 let operator;
 let termTwo;
+
 generateCalculator();
 
 function generateCalculator() {
@@ -39,6 +40,12 @@ function determineKey(x, y, key) {
         key.addEventListener("click", (e) => keyCallback(key.textContent));
         if (key.textContent === "C") {
             key.classList.add("key-c");
+        } else if (OPERATORS.includes(key.textContent)) {
+            key.classList.add("key-operator");
+        } else if (key.textContent === "=") {
+            key.classList.add("key-eq");
+        } else if (key.textContent === "⌫") {
+            key.classList.add("key-bk");
         }
     } else {
         key.classList.remove("key");
@@ -81,6 +88,14 @@ function keyCallback (keyText) {
             termTwo = undefined;
             operator = undefined;
             break;
+        case keyText === "⌫":
+            if (operator && operatorLastLine()) {
+                operator = undefined;
+                equationValue = equationValue.slice(0, -1);
+            } else if (!equalsLastLine()) {
+                equationValue = equationValue.slice(0, -1);
+            }
+            break;
         case keyText === "=":
             if (operator && !operatorLastLine() && !dotLastLine())
                 evalEquation();
@@ -111,7 +126,6 @@ function updateDisplay() {
 function evalEquation(nextOperator) {
     termTwo = parseFloat(equationValue.split(/[÷+×−]/)[1]);
     let res = +operate(operator, termOne, termTwo).toFixed(MAX_DECIMAL_POINTS);
-    console.log(res);
     if (res === Infinity) {
         equationValue = "";
         resultContainer.textContent = "ERROR: ÷ by 0";
@@ -140,6 +154,9 @@ function dotExistsThisTerm() {
     } else { 
         return equationValue.match(/[.]/);
     }
+}
+function equalsLastLine() {
+    return equationValue.slice(-1).match(/[=]/);
 }
 function dotLastLine() {
     return equationValue.slice(-1).match(/[.]/);
