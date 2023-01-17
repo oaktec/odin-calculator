@@ -27,9 +27,13 @@
 }
 
 .key {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex: 1;
     background-color: darkgray;
     border: solid;
     border-color: gray;
     border-radius: 4px;
+    font-size: 64px;
 }
