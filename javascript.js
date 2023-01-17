@@ -119,6 +119,9 @@ function keyCallback (keyText) {
                 equationValue = equationValue.slice(0, -1);
             } else if (!equalsLastLine()) {
                 equationValue = equationValue.slice(0, -1);
+                if (equationValue === "") {
+                    equationValue = "0";
+                }
             }
             break;
         case keyText === "=":
@@ -131,6 +134,9 @@ function keyCallback (keyText) {
             }
             break;
         default:
+            if (keyText === "0" && onlyZeroThisTerm()) {
+                return;
+            }
             if (overwriteNumber) {
                 equationValue = "" + keyText;
                 resultValue = "";
@@ -143,20 +149,30 @@ function keyCallback (keyText) {
     updateDisplay();
 }
 function updateDisplay() {
+    if (equationValue.length >= 15) {
+        throwError("Display Overflow");
+    }
+
     if (equationValue !== "") {
         equationContainer.textContent = equationValue;
+        resultContainer.textContent = resultValue;
     }
-    resultContainer.textContent = resultValue;
+}
+function throwError(msg) {
+    equationValue = "";
+    resultValue = "";
+    equationContainer.textContent = msg;
+    resultContainer.textContent = "^ERROR^";
+    operator = undefined;
+    termOne = undefined;
+    termTwo = undefined;
+    return;
 }
 function evalEquation(nextOperator) {
     termTwo = parseFloat(equationValue.split(/[÷+×−]/)[1]);
     let res = +operate(operator, termOne, termTwo).toFixed(MAX_DECIMAL_POINTS);
     if (res === Infinity) {
-        equationValue = "";
-        resultContainer.textContent = "ERROR: ÷ by 0";
-        operator = undefined;
-        termOne = undefined;
-        termTwo = undefined;
+        throwError("Divide by 0");
         return;
     }
     resultValue = "" + res;
@@ -172,6 +188,13 @@ function evalEquation(nextOperator) {
         termOne = undefined;
     }
     termTwo = undefined;
+}
+function onlyZeroThisTerm() {
+    if (termOne) {
+        return equationValue.split(/[÷+×−]/)[1] === "0";
+    } else {
+        return equationValue === "0";
+    }
 }
 function dotExistsThisTerm() {
     if (termOne) {
