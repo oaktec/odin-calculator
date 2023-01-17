@@ -54,7 +54,7 @@ function keyCallback (keyText) {
                 if (operatorLastLine()) { //changing current operator
                     setOperator(keyText);
                     equationValue = equationValue.slice(0, -1) + keyText;
-                } else { // evaluating equation and setting new
+                } else if (!dotLastLine()) { // evaluating equation and setting new
                     evalEquation(keyText);
                 }
                 
@@ -77,13 +77,16 @@ function keyCallback (keyText) {
             equationValue = "0";
             resultValue = "";
             overwriteNumber = true;
+            termOne = undefined;
+            termTwo = undefined;
+            operator = undefined;
             break;
         case keyText === "=":
-            if (operator && !operatorLastLine())
+            if (operator && !operatorLastLine() && !dotLastLine())
                 evalEquation();
             break;
         case keyText === ".":
-            if (!operatorLastLine()) {
+            if (numberLastLine() && !dotExistsThisTerm()) {
                 equationValue += keyText;
             }
             break;
@@ -108,6 +111,7 @@ function updateDisplay() {
 function evalEquation(nextOperator) {
     termTwo = parseFloat(equationValue.split(/[÷+×−]/)[1]);
     let res = +operate(operator, termOne, termTwo).toFixed(MAX_DECIMAL_POINTS);
+    console.log(res);
     if (res === Infinity) {
         equationValue = "";
         resultContainer.textContent = "ERROR: ÷ by 0";
@@ -129,6 +133,19 @@ function evalEquation(nextOperator) {
         termOne = undefined;
     }
     termTwo = undefined;
+}
+function dotExistsThisTerm() {
+    if (termOne) {
+        return  equationValue.split(/[÷+×−]/)[1].match(/[.]/);
+    } else { 
+        return equationValue.match(/[.]/);
+    }
+}
+function dotLastLine() {
+    return equationValue.slice(-1).match(/[.]/);
+}
+function numberLastLine() {
+    return equationValue.slice(-1).match(/[(0-9)]/);
 }
 function operatorLastLine() {
     return OPERATORS.includes(equationValue.slice(-1));
