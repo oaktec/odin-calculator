@@ -6,10 +6,14 @@ const KEYPAD_MAP = [[" ", " ", " ", "C"],
                     ["1", "2", "3", "−"], 
                     ["0", ".", "=", "+"]];
 const OPERATORS = ["÷", "+", "×", "−"];
+const MAX_DECIMAL_POINTS = 8;
 
 const keypadContainer = document.querySelector(".keypad-container");
-const outputContainer = document.querySelector(".output-container")
-let displayValue = "0";
+const resultContainer = document.querySelector(".result-container");
+const equationContainer = document.querySelector(".equation-container");
+let equationValue = "0";
+let resultValue = "";
+let overwriteNumber = true;
 let termOne;
 let operator;
 let termTwo;
@@ -33,6 +37,12 @@ function determineKey(x, y, key) {
     key.textContent = KEYPAD_MAP[y][x];
     if (key.textContent !== " ") {
         key.addEventListener("click", (e) => keyCallback(key.textContent));
+        if (key.textContent === "C") {
+            key.classList.add("key-c");
+        }
+    } else {
+        key.classList.remove("key");
+        key.classList.add("key-empty");
     }
     return key;
 }
@@ -43,54 +53,85 @@ function keyCallback (keyText) {
             if (operator)  { // already picked an operator
                 if (operatorLastLine()) { //changing current operator
                     setOperator(keyText);
-                    displayValue = displayValue.slice(0, -1) + keyText;
+                    equationValue = equationValue.slice(0, -1) + keyText;
                 } else { // evaluating equation and setting new
                     evalEquation(keyText);
                 }
                 
-            } else {
-                termOne = parseFloat(displayValue);
+            } else  {
+                if (equationValue === "") {
+                    return;
+                }
+                if (equationValue.slice(-1) === "=") {
+                    termOne = parseFloat(resultValue);
+                    equationValue = "" + termOne;
+                } else {
+                    termOne = parseFloat(equationValue);
+                }
+                overwriteNumber = false;
                 setOperator(keyText);
-                displayValue += keyText;
-            }
-
-            if (operatorLastLine()) {//just picked an operator
-                displayValue = displayValue.slice(0, -1) + keyText;
-            } else {
-                displayValue += keyText;
+                equationValue += keyText;
             }
             break;
         case keyText === "C":
-            displayValue = "0";
+            equationValue = "0";
+            resultValue = "";
+            overwriteNumber = true;
             break;
         case keyText === "=":
             if (operator && !operatorLastLine())
                 evalEquation();
             break;
-        default:
-            if (displayValue === "0" && keyText !== ".") {
-                displayValue = "";
+        case keyText === ".":
+            if (!operatorLastLine()) {
+                equationValue += keyText;
             }
-            displayValue += keyText;
+            break;
+        default:
+            if (overwriteNumber) {
+                equationValue = "" + keyText;
+                resultValue = "";
+                overwriteNumber = false;
+            } else {
+                equationValue += keyText;
+            }
             break;
     }
-    outputContainer.textContent = displayValue;
+    updateDisplay();
+}
+function updateDisplay() {
+    if (equationValue !== "") {
+        equationContainer.textContent = equationValue;
+    }
+    resultContainer.textContent = resultValue;
 }
 function evalEquation(nextOperator) {
-    termTwo = parseFloat(displayValue.split(/[÷+×−]/)[1]);
-    displayValue = "" + operate(operator, termOne, termTwo);
+    termTwo = parseFloat(equationValue.split(/[÷+×−]/)[1]);
+    let res = +operate(operator, termOne, termTwo).toFixed(MAX_DECIMAL_POINTS);
+    if (res === Infinity) {
+        equationValue = "";
+        resultContainer.textContent = "ERROR: ÷ by 0";
+        operator = undefined;
+        termOne = undefined;
+        termTwo = undefined;
+        return;
+    }
+    resultValue = "" + res;
     if (nextOperator) {
-        termOne = parseFloat(displayValue);
+        termOne = parseFloat(res);
         setOperator(nextOperator);
-        displayValue += nextOperator;
+        equationValue = res + nextOperator;
+        overwriteNumber = false;
     } else {
+        equationValue += "=";
+        overwriteNumber = true;
         operator = undefined;
         termOne = undefined;
     }
     termTwo = undefined;
 }
 function operatorLastLine() {
-    return OPERATORS.includes(displayValue.slice(-1));
+    return OPERATORS.includes(equationValue.slice(-1));
 }
 function setOperator(keyText) {
     switch (keyText) {

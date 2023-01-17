@@ -1,29 +1,64 @@
+body {
+    background-color: palegoldenrod;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    font: italic small-caps bold 16px/2;
+    font-family: "Gill Sans Extrabold", sans-serif;
+}
+
 .calculator-container {
     display: flex;
     flex-direction: column;
-    width: 500px;
-    background-color: black;
-    padding: 16px;
+    width: 400px;
+    background-color: gray;
+    margin: 64px;
+    border: solid;
+    border-radius: 32px;
+    padding: 32px;
+    gap: 32px;
+
 }
 
 .output-container {
+    display:flex;
+    flex: 1;
+    flex-direction: column;
     align-self: stretch;
-    text-align: center;
-    background-color: lightgray;
-    font-size: 64px;
-    padding:16px;
+    text-align: right;
+    background-color: slategray;
+    font-size: 48px;
+    border-radius: 16px;
+    border: solid;
+    padding:8px;
+}
+
+.equation-container {
+    height: 32px;
+    font-size: 32px;
+    flex: auto;
+}
+
+.result-container {
+    flex: auto;
+    height: 48px;
+    color: whitesmoke;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .keypad-container {
     display: flex;
     height: 500px;
-    width: 500px;
+    width: 400px;
+    gap: 8px;
 }
 
 .keypad-col {
     display: flex;
     flex-direction: column;
     flex: 1;
+    gap: 8px;
 }
 
 .key {
@@ -33,7 +68,21 @@
     flex: 1;
     background-color: darkgray;
     border: solid;
-    border-color: gray;
-    border-radius: 4px;
+    border-radius: 16px;
     font-size: 64px;
+}
+
+.key-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    border: solid;
+    border-color: gray;
+    border-radius: 16px;
+    font-size: 64px;
+}
+
+.key-c {
+    background-color: lightcoral;
 }
