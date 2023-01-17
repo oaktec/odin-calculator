@@ -1,0 +1,35 @@
+.calculator-container {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    background-color: black;
+    padding: 16px;
+}
+
+.output-container {
+    align-self: stretch;
+    text-align: center;
+    background-color: lightgray;
+    font-size: 64px;
+    padding:16px;
+}
+
+.keypad-container {
+    display: flex;
+    height: 500px;
+    width: 500px;
+}
+
+.keypad-col {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.key {
+    flex: 1;
+    background-color: darkgray;
+    border: solid;
+    border-color: gray;
+    border-radius: 4px;
+}
