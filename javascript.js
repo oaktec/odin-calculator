@@ -7,6 +7,8 @@ const KEYPAD_MAP = [[" ", " ", " ", "C"],
                     ["0", ".", "=", "+"]];
 
 const keypadContainer = document.querySelector(".keypad-container");
+const outputContainer = document.querySelector(".output-container")
+let displayValue = "";
 generateCalculator();
 
 function generateCalculator() {
@@ -25,10 +27,14 @@ function generateCalculator() {
 }
 function determineKey(x, y, key) {
     key.textContent = KEYPAD_MAP[y][x];
+    key.addEventListener("click", (e) => keyCallback(key.textContent));
     return key;
 }
 
-
+function keyCallback (keyText) {
+    displayValue += keyText;
+    outputContainer.textContent = displayValue;
+}
 function add(a,b) {
     return a + b;
 }
