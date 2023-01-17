@@ -1,5 +1,9 @@
 const KEYPAD_NUMBER_OF_COLS = 4; 
 const KEYPAD_NUMBER_OF_ROWS = 4;
+const KEYPAD_MAP = [["7", "8", "9", "÷"], 
+                    ["4", "5", "6", "×"], 
+                    ["1", "2", "3", "−"], 
+                    ["0", ".", "=", "+"]];
 
 const keypadContainer = document.querySelector(".keypad-container");
 generateCalculator();
@@ -19,72 +23,7 @@ function generateCalculator() {
     }
 }
 function determineKey(x, y, key) {
-    switch(x) {
-        case 0:
-            switch (y) {
-                case 0:
-                    key.textContent = "7";
-                    break;
-                case 1:
-                    key.textContent = "4";
-                    break;
-                case 2:
-                    key.textContent = "1";
-                    break;
-                case 3:
-                    key.textContent = "0";
-                    break;
-            }
-            break;
-        case 1:
-            switch (y) {
-                case 0:
-                    key.textContent = "8";
-                    break;
-                case 1:
-                    key.textContent = "5";
-                    break;
-                case 2:
-                    key.textContent = "2";
-                    break;
-                case 3:
-                    key.textContent = ".";
-                    break;
-            }
-            break;
-        case 2:
-            switch (y) {
-                case 0:
-                    key.textContent = "9";
-                    break;
-                case 1:
-                    key.textContent = "6";
-                    break;
-                case 2:
-                    key.textContent = "3";
-                    break;
-                case 3:
-                    key.textContent = "=";
-                    break;
-            }
-            break;
-        case 3:
-            switch (y) {
-                case 0:
-                    key.textContent = "÷";
-                    break;
-                case 1:
-                    key.textContent = "×";
-                    break;
-                case 2:
-                    key.textContent = "−";
-                    break;
-                case 3:
-                    key.textContent = "+";
-                    break;
-            }
-            break;
-    }
+    key.textContent = KEYPAD_MAP[y][x];
     return key;
 }
 
