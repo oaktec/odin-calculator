@@ -71,13 +71,13 @@ function determineKey(x, y, key) {
         case 3:
             switch (y) {
                 case 0:
-                    key.textContent = "/";
+                    key.textContent = "÷";
                     break;
                 case 1:
-                    key.textContent = "X";
+                    key.textContent = "×";
                     break;
                 case 2:
-                    key.textContent = "-";
+                    key.textContent = "−";
                     break;
                 case 3:
                     key.textContent = "+";
