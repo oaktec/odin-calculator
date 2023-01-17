@@ -18,6 +18,31 @@ let termOne;
 let operator;
 let termTwo;
 
+document.addEventListener("keydown", (e) => {
+    let key = e.key;
+
+    if (key === "c" || key === "Escape") {
+        key = "C";
+    } else if (key === "Backspace") {
+        key = "⌫";
+    } else if (key === "Enter") {
+        key = "=";
+    } else if (key === "-") {
+        key = "−";
+    } else if (key === "*") {
+        key = "×";
+    } else if (key === "/") {
+        key = "÷";
+    }
+
+    if (!key.match(/[(0-9)C÷×+−.=⌫]/)) {
+         return;
+    } 
+    e.preventDefault();
+
+    keyCallback(key);
+})
+
 generateCalculator();
 
 function generateCalculator() {
