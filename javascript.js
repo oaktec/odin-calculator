@@ -1,6 +1,7 @@
 const KEYPAD_NUMBER_OF_COLS = 4; 
-const KEYPAD_NUMBER_OF_ROWS = 4;
-const KEYPAD_MAP = [["7", "8", "9", "÷"], 
+const KEYPAD_NUMBER_OF_ROWS = 5;
+const KEYPAD_MAP = [[" ", " ", " ", "C"],
+                    ["7", "8", "9", "÷"], 
                     ["4", "5", "6", "×"], 
                     ["1", "2", "3", "−"], 
                     ["0", ".", "=", "+"]];
