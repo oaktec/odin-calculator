@@ -6,7 +6,7 @@ const KEYPAD_MAP = [[" ", " ", "C", "⌫"],
                     ["1", "2", "3", "−"], 
                     ["0", ".", "=", "+"]];
 const OPERATORS = ["÷", "+", "×", "−"];
-const MAX_DECIMAL_POINTS = 8;
+const MAX_DECIMAL_POINTS = 4;
 
 const keypadContainer = document.querySelector(".keypad-container");
 const resultContainer = document.querySelector(".result-container");
@@ -35,7 +35,7 @@ document.addEventListener("keydown", (e) => {
         key = "÷";
     }
 
-    if (!key.match(/[(0-9)C÷×+−.=⌫]/)) {
+    if (!key.match(/[(0-9)C÷×+−.=⌫]/) || key.includes("F")) {
          return;
     } 
     e.preventDefault();
